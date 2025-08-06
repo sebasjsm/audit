@@ -1,0 +1,18 @@
+--INSTALAMOS pyinstaler PARA PODER TENER LA APP EN .EXE-- 
+
+pip install pyinstaller
+
+--VAMOS A LA RUTA EN LA CUAL SE ENCUENTRA LA PP--
+pyinstaller --onefile main.py
+
+--PARA VOLVER A COMPILAR Y GUARDAR LOS CAMBIOS--
+pyinstaller --onefile main.py
+
+--PARA INSTALAR EN LIMPIO--
+pyinstaller --onefile --clean main.py
+
+--PARA CAMBIAR EL NOMBRE DEL ARCHIVO.EXE--
+pyinstaller --onefile --name auditor main.py
+
+
+
