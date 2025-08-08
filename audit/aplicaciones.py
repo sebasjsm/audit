@@ -5,6 +5,8 @@ def verificar_aplicaciones(filtro = None):
             r"SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall"
     ]
 
+    encontrado = False
+
     for key_path in keys:
         try:
             with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, key_path) as key:
@@ -14,16 +16,18 @@ def verificar_aplicaciones(filtro = None):
                     try:
                         with winreg.OpenKey(key, subkey_name) as subkey:
                             display_name = winreg.QueryValueEx(subkey, "DisplayName")[0]
-                            if filtro and filtro.lower() not in display_name.lower():
+                            if filtro and filtro.lower() not in display_name.lower():# Filtra por nombre de aplicación
                                 continue
                             try:
                                 display_version = winreg.QueryValueEx(subkey, "DisplayVersion")[0]
                             except FileNotFoundError:
                                 display_version = "Version Desconocida"
                             print(f"{display_name} - Version: {display_version}")
+                            encontrado = True
                     except FileNotFoundError:
                         #print(f"Subclave {subkey_name} no tiene DisplayName.")
                         continue
         except FileNotFoundError:
             print(f"La clave {key_path} no existe.")
             continue
+    return encontrado
