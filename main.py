@@ -1,4 +1,6 @@
 from audit import aplicaciones
+from audit import ip
+from audit import limpieza
 
 ###FUNCIONES###
 def search(data = None):
@@ -12,10 +14,9 @@ def search(data = None):
 if __name__ == "__main__":
 
     while True:
-    
         print("---Inicio de la auditoria---")
         print("1. Verificar aplicaciones")
-        print("2. Borrar archivos temporales")
+        print("2. Limpieza(temp y papelera)")
         print("3. Obtener dirección IP local")
         print("4. Salir")
         opcion = input("Selecciona una opcion: ")
@@ -26,12 +27,14 @@ if __name__ == "__main__":
                 search("kaspersky")
                 search("adobe")
                 search("winrar")
-                
             case "2":
-                print("borrando temporales...")
+                print("🧹Limpiando archivos temporales...")
+                limpieza.limpiar_todo()
             case "3":
+                print("Obteniendo dirección IP local...")
+                ip.is_dhcp_enabled()
+            case "4":
                 print("Saliendo de la auditoria...")
-                aplicaciones.verificar_aplicaciones()
                 break
             case _:
                 print("Opcion no valida. Intente de nuevo.")

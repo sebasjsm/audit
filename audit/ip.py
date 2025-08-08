@@ -23,7 +23,7 @@ def get_ip_address():
         return None
 
 # Muestra la IP local obtenida
-print("Tu dirección IP local es:", get_ip_address())
+#print("Tu dirección IP local es:", get_ip_address())
 
 # ===============================
 # Función para saber si la IP es asignada por DHCP o es manual (estática)
@@ -69,7 +69,7 @@ def is_dhcp_enabled():
         return None
 
 # Llama a la función para mostrar si la IP es DHCP o manual
-is_dhcp_enabled()
+#is_dhcp_enabled()
 
 '''
 PALABRAS CLAVE:
