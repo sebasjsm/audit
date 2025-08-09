@@ -1,5 +1,5 @@
 from audit import aplicaciones
-from audit import ip
+from audit import pc_info
 from audit import limpieza
 
 ###FUNCIONES###
@@ -18,7 +18,9 @@ if __name__ == "__main__":
         print("1. Verificar aplicaciones")
         print("2. Limpieza(temp y papelera)")
         print("3. Obtener dirección IP local")
-        print("4. Salir")
+        print("4. Hostname del equipo")
+        print("5. Datos del equipo")
+        print("9. Salir")
         opcion = input("Selecciona una opcion: ")
 
         match opcion:
@@ -32,8 +34,16 @@ if __name__ == "__main__":
                 limpieza.limpiar_todo()
             case "3":
                 print("Obteniendo dirección IP local...")
-                ip.is_dhcp_enabled()
+                pc_info.is_dhcp_enabled()
             case "4":
+                print("Obteniendo hostname del equipo...")
+                pc_info.get_hostname()
+            case "5":
+                print("Obteniendo datos de equipo...")
+                print('###########################')
+                pc_info.get_system_info()
+                print('###########################')
+            case "9":
                 print("Saliendo de la auditoria...")
                 break
             case _:

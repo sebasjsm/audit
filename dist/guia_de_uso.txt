@@ -14,5 +14,17 @@ pyinstaller --onefile --clean main.py
 --PARA CAMBIAR EL NOMBRE DEL ARCHIVO.EXE--
 pyinstaller --onefile --name auditor main.py
 
+| Opción                         | Qué hace                                                       |
+| ------------------------------ | -------------------------------------------------------------- |
+| `--onefile`                    | Un solo `.exe` en vez de carpeta con muchos archivos.          |
+| `--noconsole` / `-w`           | Oculta la consola en apps gráficas.                            |
+| `--name= NOMBRE`               | Cambia el nombre del ejecutable.                               |
+| `--icon= archivo.ico`          | Asigna un icono personalizado al `.exe`.                       |
+| `--add-data "archivo;carpeta"` | Añade archivos o carpetas necesarias (imágenes, config, etc.). |
+| `--hidden-import módulo`       | Incluye módulos que PyInstaller no detecta automáticamente.    |
+| `--clean`                      | Limpia la caché de compilación antes de generar el `.exe`.     |
+| `--debug`                      | Genera un ejecutable con información de depuración.            |
+
+
 
 
