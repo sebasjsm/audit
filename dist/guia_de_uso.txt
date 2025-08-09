@@ -16,14 +16,60 @@ pyinstaller --onefile --name auditor main.py
 
 | Opción                         | Qué hace                                                       |
 | ------------------------------ | -------------------------------------------------------------- |
-| `--onefile`                    | Un solo `.exe` en vez de carpeta con muchos archivos.          |
-| `--noconsole` / `-w`           | Oculta la consola en apps gráficas.                            |
-| `--name= NOMBRE`               | Cambia el nombre del ejecutable.                               |
-| `--icon= archivo.ico`          | Asigna un icono personalizado al `.exe`.                       |
-| `--add-data "archivo;carpeta"` | Añade archivos o carpetas necesarias (imágenes, config, etc.). |
-| `--hidden-import módulo`       | Incluye módulos que PyInstaller no detecta automáticamente.    |
-| `--clean`                      | Limpia la caché de compilación antes de generar el `.exe`.     |
-| `--debug`                      | Genera un ejecutable con información de depuración.            |
+| --onefile                      | Un solo .exeen vez de carpeta con muchos archivos.          |
+| --noconsole/ -w                | Oculta la consola en apps gráficas.                            |
+| --name= NOMBRE                 | Cambia el nombre del ejecutable.                               |
+| --icon= archivo.ico            | Asigna un icono personalizado al .exe.                       |
+| --add-data "archivo;carpeta"   | Añade archivos o carpetas necesarias (imágenes, config, etc.). |
+| --hidden-import módulo         | Incluye módulos que PyInstaller no detecta automáticamente.    |
+| --clean                        | Limpia la caché de compilación antes de generar el .exe.     |
+| --debug                        | Genera un ejecutable con información de depuración.            |
+
+
+Opciones Generales
+| Opción                | Descripción                                                                         |
+| --------------------- | ----------------------------------------------------------------------------------- |
+| -h, --help            | Muestra la ayuda y sale del comando. ([PyInstaller][1])                             |
+| -v, --version         | Muestra la versión de PyInstaller e interrompe. ([PyInstaller][1])                  |
+| --distpath DIR        | Define dónde colocar el ejecutable final (por defecto ./dist). ([PyInstaller][1]) |
+| --workpath WORKPATH   | Carpeta para archivos temporales (buildpor defecto). ([PyInstaller][1])          |
+| -y, --noconfirm       | Reemplaza la carpeta de salida sin preguntar. ([PyInstaller][1])                    |
+| --upx-dir UPX_DIR     | Ruta al ejecutable UPX usado para comprimir. ([PyInstaller][1])                     |
+| -a, --ascii           | Excluye soporte para Unicode. ([PyInstaller][1])                                    |
+| --clean               | Limpia la caché antes de compilar. ([PyInstaller][1])                               |
+| --log-level LEVEL     | Detalla el nivel de logs (DEBUG, INFO, etc.). ([PyInstaller][1])                |
+
+¿Qué generar?
+| Opción                        | Descripción                                                                   |
+| ----------------------------- | ----------------------------------------------------------------------------- |
+| --add-data "SRC;DEST"         | Incluye archivos/carpetas (ajustar según el SO). ([PyInstaller][1])           |
+| --add-binary "SRC;DEST"       | Incluye archivos binarios necesarios. ([PyInstaller][1])                      |
+| -p, --paths DIR               | Agrega rutas adicionales para buscar módulos. ([PyInstaller][1])              |
+| --hidden-import MODULENAME    | Incluye módulos detectados dinámicamente. ([PyInstaller][1])                  |
+| --additional-hooks-dir PATH   | Ruta adicional para hooks personalizados. ([PyInstaller][1])                  |
+| --runtime-hook PATH           | Hook que se ejecuta antes que tu código; ideal para setup. ([PyInstaller][1]) |
+| --exclude-module MODULE       | Omite módulos específicos de la compilación. ([PyInstaller][1])               |
+| --key KEY                     | Clave para cifrar el bytecode compilado. ([PyInstaller][1])                   |
+
+Depuración y optimización
+| Opción                        | Descripción                                                                                               |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------- |
+| -d OPTION, --debug OPTION     | Muestra detalles durante la compilación. (imports, bootloader, noarchive, all) ([PyInstaller][1]) |
+| -s, --strip                   | Quita símbolos del .exe, útil para reducir tamaño. ([PyInstaller][1])                                   |
+| --noupx                       | Desactiva compresión UPX si causa problemas. ([PyInstaller][1])                                           |
+| --upx-exclude FILE            | Evita comprimir un archivo específico cuando UPX genera error. ([PyInstaller][1])                         |
+| --optimize LEVEL              | Define nivel de optimización de bytecode. ([PyInstaller][1])                                              |
+| --python-option OPTIONS       | Pasa opciones a Python runtime, como -v, -u, -W, o hash_seed. ([PyInstaller][1])                  |
+
+Windows / macOS específicos
+| Opción                            | Descripción                                                                     |
+| --------------------------------- | ------------------------------------------------------------------------------- |
+| -c, --console, --nowindowed       | Abre con la consola activa (por defecto). ([PyInstaller][1], [Super User][2])   |
+| -w, --windowed, --noconsole       | Oculta consola y crea .appen macOS. ([PyInstaller][1])                       |
+| --hide-console TYPE               | Controla cómo se oculta la consola (minimize-early, etc.). ([PyInstaller][1]) |
+| -i, --icon FILE                   | Aplica ícono .icoo .icns(.exe o .app). ([PyInstaller][1])                 |
+
+
 
 
 
