@@ -33,7 +33,7 @@ def run_as_admin():
 ###############
 
 if __name__ == "__main__":
-    #run_as_admin()  # Llama a la función para verificar y elevar permisos si es necesario
+    run_as_admin()  # Llama a la función para verificar y elevar permisos si es necesario
     while True:
         print("---Inicio de la auditoria---")
         print("1. Verificar aplicaciones")

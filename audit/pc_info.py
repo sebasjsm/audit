@@ -1,6 +1,7 @@
 import socket
 import subprocess
 import platform
+import shutil
 
 # ===============================
 # Función para obtener la dirección IP local del equipo
@@ -191,8 +192,9 @@ def get_computer_processor():
 #print(get_computer_processor())
 
 def get_computer_storage():
-    #TODO: Implementar función para obtener información de almacenamiento
-    pass
+    total, used, free = shutil.disk_usage("/")
+    return f"Total: {total // (2**30)} GiB"
+#, Used: {used // (2**30)} GiB, Free: {free // (2**30)} GiB
 
 def get_total_memory():
 #34128322560 ÷ (1024³) = 31.78 GB
@@ -213,24 +215,27 @@ def get_total_memory():
 def get_system_info():
     hostname = get_hostname()
     computer_type = get_computer_type()
+    computer_brand = get_computer_brand()
     computer_model = get_computer_model()
     serial_number = get_serial_number()
-    computer_brand = get_computer_brand()
     computer_os = get_computer_os()
     computer_architecture = get_computer_architecture()
     computer_processor = get_computer_processor()
+    computer_storage = get_computer_storage()
     computer_memory = get_total_memory()
 
+
     print(f"hostname: {hostname}")
-    print(f"ip and dhcp: {is_dhcp_enabled()}")
     print(f"computer_type: {computer_type}")
+    print(f"computer_brand: {computer_brand}")
     print(f"computer_model: {computer_model}")
     print(f"serial_number: {serial_number}")
-    print(f"computer_brand: {computer_brand}")
     print(f"computer_os: {computer_os}")
     print(f"computer_architecture: {computer_architecture}")
     print(f"computer_processor: {computer_processor}")
+    print(f"computer_storage: {computer_storage}")
     print(f"computer_memory: {computer_memory}")
+    print(f"ip and dhcp: {is_dhcp_enabled()}")
 #get_system_info()
 
 '''

@@ -14,6 +14,11 @@ pyinstaller --onefile --clean main.py
 --PARA CAMBIAR EL NOMBRE DEL ARCHIVO.EXE--
 pyinstaller --onefile --name auditor main.py
 
+--USANDO ONEDIR-- 
+pyinstaller --onedir --name=Auditoria --icon=icono.ico main.py
+CON ONEDIR EVITO EL PROBLEMA DE TEMPORALES YA QUE CREA SU CARPETA Y NO TEMPORALES COMO LO HACE onefile
+EL PROBLEMA ES QUE LLEVA TODO EN CARPETAS PERO SOLO SE VE FEO XD
+
 | Opción                         | Qué hace                                                       |
 | ------------------------------ | -------------------------------------------------------------- |
 | --onefile                      | Un solo .exeen vez de carpeta con muchos archivos.          |
