@@ -4,6 +4,12 @@ from audit import limpieza
 import ctypes
 import sys
 
+# Proyecto: Sistema de Auditoria
+# Autor: William Franco(GIT: William495t)
+# Fecha: Agosto 2025
+
+
+
 ###FUNCIONES###
 def search(data = None):
     resultado = aplicaciones.verificar_aplicaciones(data)
