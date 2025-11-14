@@ -257,7 +257,7 @@ def detectar_office_y_version():
     Detección de Office 100% confiable:
     1) Primero Uninstall (DisplayName)
     2) Luego ClickToRun si Uninstall no sirve
-    3) Nunca usar build para determinar 2019/2021/2024
+    3) Nunca usar build para determinar 2019/2021/2024 en MSI clásico
     """
 
     # ----------- 1) Buscar Office en Uninstall -----------
@@ -266,19 +266,13 @@ def detectar_office_y_version():
         low = nombre.lower()
 
         if "microsoft office" in low:
-            if "2019" in low:
-                return {"nombre": "OFFICE 2019", "version": ver, "raw_name": nombre}
-            if "2021" in low or "l t s c" in low or "ltsc" in low:
-                return {"nombre": "OFFICE 2021", "version": ver, "raw_name": nombre}
-            if "2016" in low:
-                return {"nombre": "OFFICE 2016", "version": ver, "raw_name": nombre}
-
-            # Si no tiene año, puede ser 365
-            if "365" in low:
-                return {"nombre": "OFFICE 365", "version": ver, "raw_name": nombre}
-
-            # Caso no catalogado
-            return {"nombre": "OFFICE", "version": ver, "raw_name": nombre}
+            # 🔹 Usamos el normalizador genérico
+            canon = _canonicalizar_office(nombre, ver)
+            return {
+                "nombre": canon,
+                "version": ver,
+                "raw_name": nombre
+            }
 
         # LibreOffice
         if "libreoffice" in low:
@@ -290,7 +284,7 @@ def detectar_office_y_version():
         ids = (c2r.get("ids") or "")
         ver = c2r.get("version") or ""
 
-        # 🔴 AQUÍ es donde usamos tu normalizador avanzado
+        # Aquí usamos el normalizador avanzado para C2R / 365 / LTSC
         canon = _canon_office_por_releaseids(ids, ver)  # ej. 'OFFICE 2021'
 
         return {
