@@ -10,6 +10,9 @@ import re
 import subprocess
 import psutil
 
+
+OFFICE_DETECTADO_OPCION1 = None
+
 def _detectar_tipos_discos():
     """
     Usa PowerShell (Get-PhysicalDisk) para obtener tipo real.
@@ -251,83 +254,53 @@ def _canon_office_por_releaseids(ids: str, version: str) -> str:
 
 def detectar_office_y_version():
     """
-    Devuelve algo como:
-    {
-        'nombre': 'OFFICE 2019',
-        'version': '16.0.10396.20002',
-        'raw_name': 'Microsoft Office Professional Plus 2019'
-    }
+    Detección de Office 100% confiable:
+    1) Primero Uninstall (DisplayName)
+    2) Luego ClickToRun si Uninstall no sirve
+    3) Nunca usar build para determinar 2019/2021/2024
     """
-    mejor = {"nombre": "", "version": "", "raw_name": ""}
 
-    # ------------- Buscar en Uninstall -------------
-    candidatos = []
+    # ----------- 1) Buscar Office en Uninstall -----------
     for nombre, ver in _programas_instalados():
-        if not nombre:
-            continue
 
         low = nombre.lower()
 
-        if any(k in low for k in [
-                "microsoft office", "microsoft 365", "office ltsc",
-                "libreoffice", "openoffice", "open office"
-        ]):
+        if "microsoft office" in low:
+            if "2019" in low:
+                return {"nombre": "OFFICE 2019", "version": ver, "raw_name": nombre}
+            if "2021" in low or "l t s c" in low or "ltsc" in low:
+                return {"nombre": "OFFICE 2021", "version": ver, "raw_name": nombre}
+            if "2016" in low:
+                return {"nombre": "OFFICE 2016", "version": ver, "raw_name": nombre}
 
-            # filtro de basura
-            if any(bad in low for bad in [
-                "language", "update", "proof", "pack", "runtime",
-                "click-to-run", "teams", "addin", "add-in", "addins", "meeting"
-            ]):
-                continue
+            # Si no tiene año, puede ser 365
+            if "365" in low:
+                return {"nombre": "OFFICE 365", "version": ver, "raw_name": nombre}
 
-            candidatos.append((nombre, ver))
+            # Caso no catalogado
+            return {"nombre": "OFFICE", "version": ver, "raw_name": nombre}
 
-    # ------------- Procesar candidatos clásicos -------------
-    if candidatos:
-        for nombre, ver in candidatos:
-            # 1) Intento exacto por build
-            exact = _resolver_por_build(ver)
-            if exact:
-                return {
-                    "nombre": f"OFFICE {exact}",
-                    "version": ver,
-                    "raw_name": nombre
-                }
+        # LibreOffice
+        if "libreoffice" in low:
+            return {"nombre": "LIBRE OFFICE", "version": ver, "raw_name": nombre}
 
-        # 2) Normalización estándar como fallback
-        #    (por si no podemos resolver build)
-        canon = _canonicalizar_office(candidatos[0][0], candidatos[0][1])
-        return {
-            "nombre": canon,
-            "version": candidatos[0][1],
-            "raw_name": candidatos[0][0]
-        }
-
-    # ------------- Fallback: Click-To-Run -------------
+    # ----------- 2) Fallback: ClickToRun -----------
     c2r = _leer_office_clicktorun()
     if c2r:
-        ver = c2r.get("version", "")
-        ids = c2r.get("ids", "")
+        ids = (c2r.get("ids") or "")
+        ver = c2r.get("version") or ""
 
-        # Intento exacto por build
-        exact = _resolver_por_build(ver)
-        if exact:
-            return {
-                "nombre": f"OFFICE {exact}",
-                "version": ver,
-                "raw_name": ids
-            }
-
-        # Normalizador por ProductReleaseIds
-        nombre = _canon_office_por_releaseids(ids, ver)
+        # 🔴 AQUÍ es donde usamos tu normalizador avanzado
+        canon = _canon_office_por_releaseids(ids, ver)  # ej. 'OFFICE 2021'
 
         return {
-            "nombre": nombre,
+            "nombre": canon,
             "version": ver,
             "raw_name": ids
         }
 
-    return mejor
+    # ----------- 3) No se encontró nada -----------
+    return {"nombre": "", "version": "", "raw_name": ""}
 
 # Lista de capacidades estándar (ajústala a lo que tienes en tu sistema)
 CAPACIDADES_ESTANDAR = [
@@ -513,12 +486,19 @@ def _auto_borrar(path: str, delay: int = 60):
 
 def obtener_datos_equipo():
     """Obtiene todos los datos del equipo y los devuelve como diccionario (crudo)."""
-    ant = detectar_antivirus_y_version()
-    off = detectar_office_y_version()   # ← ¡FALTABA ESTO!}
+    global OFFICE_DETECTADO_OPCION1
 
-    # ← NUEVO: toma crudo y normaliza para el combo
-    _mem_raw = get_total_memory()                      # p.ej. '19.83 GB'
-    _mem_norm = _normalizar_memoria_dropdown(_mem_raw) # -> '16 GB'
+    ant = detectar_antivirus_y_version()
+
+    # Si opción 1 ya detectó Office, usar ese mismo valor
+    if OFFICE_DETECTADO_OPCION1:
+        off = OFFICE_DETECTADO_OPCION1
+    else:
+        off = detectar_office_y_version()
+
+    # Memoria normalizada
+    _mem_raw = get_total_memory()
+    _mem_norm = _normalizar_memoria_dropdown(_mem_raw)
 
     datos = {
         'hostname': get_hostname(),
@@ -530,24 +510,22 @@ def obtener_datos_equipo():
         'computer_architecture': get_computer_architecture(),
         'computer_processor': get_computer_processor(),
         'computer_storage': get_computer_storage(),
-        'computer_memory': _mem_norm,        # ✅ el que usa tu select
-        #'computer_memory': get_total_memory(),
-        'disk_capacities': ", ".join(get_disk_capacities()),   # 👈 devuelve string
+        'computer_memory': _mem_norm,
+        'disk_capacities': ", ".join(get_disk_capacities()),
         'ip_address': get_ip_address(),
-        'usuarioDominio': _usuario_dominio(),   # 👈 NUEVO
+        'usuarioDominio': _usuario_dominio(),
         'dhcp_info': is_dhcp_enabled(),
 
-
-        # 🆕 Office normalizado
+        # Office
         'office': off.get('nombre', ''),
         'office_version': off.get('version', ''),
         'office_raw_name': off.get('raw_name', ''),
 
-        
-        # ⬇️ ahora mandamos nombre + versión por separado
+        # Antivirus
         'antivirus': ant.get('nombre', ''),
         'antivirus_version': ant.get('version', '')
     }
+
     return datos
 
 def guardar_json(datos, ruta_archivo):
@@ -580,10 +558,30 @@ def main():
             opcion = input("Selecciona una opcion: ").strip()
 
             if opcion == '1':
+                global OFFICE_DETECTADO_OPCION1
+
                 filtro = input("Ingrese filtro de aplicación (Enter para todas): ")
+
                 encontrado = verificar_aplicaciones(filtro)
+
+                # detectar office REAL (siempre desde cero)
+                off = detectar_office_y_version()
+
+                # si el filtro incluye "office", guardamos la detección
+                if "office" in filtro.lower():
+                    # Detectar Office REAL, no solo el nombre del programa
+                    detected_real = detectar_office_y_version()
+
+                    if detected_real != "NO OFFICE DETECTADO":
+                        OFFICE_DETECTADO_OPCION1 = detected_real
+                    else:
+                        OFFICE_DETECTADO_OPCION1 = off
+
+
                 if not encontrado:
                     print("No se encontraron aplicaciones con ese filtro.")
+                else:
+                    print(f"Office detectado (opción 1): {off['nombre']} - {off['version']}")
 
             elif opcion == '2':
                 print("Obteniendo datos de equipo...")
