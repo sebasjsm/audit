@@ -1,0 +1,21 @@
+{
+  "hostname": "SebasJsM",
+  "computer_type": "Portátil",
+  "computer_brand": "HP",
+  "computer_model": "HP Laptop 14-cf2xxx",
+  "serial_number": "5CG04937H6",
+  "computer_os": "Microsoft Windows 11 Home Single Language",
+  "computer_architecture": "64bit",
+  "computer_processor": "Intel(R) Core(TM) i3-10110U CPU @ 2.10GHz",
+  "computer_storage": "Total: 475 GiB",
+  "computer_memory": "20 GB",
+  "disk_capacities": "500 GB SSD",
+  "ip_address": "192.168.10.25",
+  "usuarioDominio": "SEBASJSM\\user",
+  "dhcp_info": "La IP 192.168.10.25 es manual (estática).",
+  "office": "OFFICE 2021",
+  "office_version": "16.0.14334.20344",
+  "office_raw_name": "ExcelVolume,PowerPointVolume,WordVolume",
+  "antivirus": "Sophos Connect",
+  "antivirus_version": "2.3.3003.0207"
+}

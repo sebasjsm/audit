@@ -2,6 +2,8 @@ import socket
 import subprocess
 import platform
 import shutil
+import psutil
+
 
 # ===============================
 # Función para obtener la dirección IP local del equipo
@@ -85,6 +87,30 @@ def get_hostname():
         print("Error al obtener el nombre del equipo:", e)
         return None
 #print(get_hostname())
+
+
+def get_disk_capacities():
+    """
+    Devuelve lista con las capacidades de los discos (en GB).
+    Ejemplo: ['500 GB', '1 TB']
+    """
+    discos = []
+    try:
+        for disk in psutil.disk_partitions(all=False):
+            try:
+                uso = psutil.disk_usage(disk.mountpoint)
+                gb = round(uso.total / (1024**3))
+                if gb >= 1024:
+                    tb = gb / 1024
+                    discos.append(f"{tb:.0f} TB")
+                else:
+                    discos.append(f"{gb} GB")
+            except PermissionError:
+                continue
+    except Exception:
+        return []
+    # Eliminar duplicados (algunos discos montan varias letras)
+    return list(dict.fromkeys(discos))
 
 
 def get_computer_type():

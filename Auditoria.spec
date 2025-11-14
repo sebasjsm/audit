@@ -2,11 +2,11 @@
 
 
 a = Analysis(
-    ['main.py'],
+    ['audit\\auditoria_mejorada.py'],
     pathex=[],
     binaries=[],
     datas=[],
-    hiddenimports=[],
+    hiddenimports=['psutil'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
