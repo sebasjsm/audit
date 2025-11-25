@@ -11,10 +11,10 @@
   "computer_memory": "20 GB",
   "disk_capacities": "500 GB SSD",
   "ip_address": "192.168.10.25",
-  "usuarioDominio": "SEBASJSM\\user",
+  "usuarioDominio": "user",
   "dhcp_info": "La IP 192.168.10.25 es manual (estática).",
   "office": "OFFICE 2021",
-  "office_version": "16.0.14334.20344",
+  "office_version": "16.0.14334.20402",
   "office_raw_name": "ExcelVolume,PowerPointVolume,WordVolume",
   "antivirus": "Sophos Connect",
   "antivirus_version": "2.3.3003.0207"

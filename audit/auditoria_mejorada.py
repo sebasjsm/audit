@@ -307,13 +307,24 @@ def aproximar_capacidad(gb: int) -> int:
 
 
 def _usuario_dominio() -> str:
-    """Devuelve 'DOMINIO\\usuario' (o sólo usuario si no hay dominio)."""
+    """
+    Devuelve solo el nombre de usuario (sin el dominio).
+    Ejemplo:
+      - Si el sistema reporta 'ALCALDIAT\\dario_betanco' → 'dario_betanco'
+      - Si no hay dominio → devuelve el usuario tal cual
+    """
     try:
         user = getpass.getuser() or os.environ.get("USERNAME", "")
     except Exception:
         user = os.environ.get("USERNAME", "")
-    dom = os.environ.get("USERDOMAIN") or os.environ.get("COMPUTERNAME") or ""
-    return f"{dom}\\{user}" if dom and user else (user or "")
+
+    # Si getuser devolviera algo tipo 'DOMINIO\\usuario', separar
+    if "\\" in user:
+        user = user.split("\\")[-1]
+    elif "@" in user:
+        user = user.split("@")[0]  # por si viene en formato correo
+
+    return user.strip()
 
 
 # --- detectar antivirus y versión desde el registro de Windows ---
